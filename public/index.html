@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚙️ Painel do Cuidador — Dona Fátima</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="glass-bg"></div>
+  <div class="glow-orb" id="orb-1"></div>
+  <div class="glow-orb" id="orb-2"></div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-logo">
+        <span class="logo-icon">⚙️</span>
+        <div>
+          <h1>Painel do Cuidador</h1>
+          <p>Controle de Medicação da Dona Fátima</p>
+        </div>
+      </div>
+      
+      <!-- Indicador de Status do Telefone -->
+      <div class="phone-status-container" id="phone-status-widget">
+        <span class="status-led led-red" id="status-led"></span>
+        <span class="status-text" id="status-text">Telefone Desconectado</span>
+      </div>
+    </header>
+
+    <!-- Barra de Navegação de Abas -->
+    <nav class="tab-navigation">
+      <button class="nav-btn active" data-tab="dashboard">📊 Dashboard</button>
+      <button class="nav-btn" data-tab="test">⏰ Testes</button>
+      <button class="nav-btn" data-tab="schedules">📅 Horários</button>
+      <button class="nav-btn" data-tab="medicines">💊 Remédios</button>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="main-content">
+      
+      <!-- ABA 1: DASHBOARD -->
+      <section class="tab-panel active" id="panel-dashboard">
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-icon">💊</div>
+            <div class="metric-info">
+              <h3 id="metric-total-meds">0</h3>
+              <p>Remédios Cadastrados</p>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon green-icon">✓</div>
+            <div class="metric-info">
+              <h3 id="metric-taken-today">0</h3>
+              <p>Tomados Hoje</p>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon yellow-icon">⌛</div>
+            <div class="metric-info">
+              <h3 id="metric-temp-treatments">0</h3>
+              <p>Tratamentos Temporários</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-details">
+          <!-- Histórico Recente -->
+          <div class="content-card history-card">
+            <div class="card-header">
+              <h2>📋 Histórico de Tomadas Recentes</h2>
+              <span class="badge" id="history-date-badge">Hoje</span>
+            </div>
+            <div class="history-list" id="history-container">
+              <div class="empty-state">
+                <p>Nenhuma tomada registrada recentemente.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Próximo Alarme -->
+          <div class="content-card next-alarm-card">
+            <div class="card-header">
+              <h2>⏳ Próximo Alarme</h2>
+            </div>
+            <div class="next-alarm-info" id="next-alarm-container">
+              <div class="next-alarm-large" id="next-alarm-time">--:--</div>
+              <div class="next-alarm-details">
+                <h3 id="next-alarm-title">Carregando...</h3>
+                <p id="next-alarm-meds">Carregando remédios...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABA 2: TESTES -->
+      <section class="tab-panel" id="panel-test">
+        <div class="panel-header">
+          <h2>⏰ Simulação de Alarme Remoto</h2>
+          <p>Selecione um dos horários para enviar um sinal WebSocket ao celular da Dona Fátima. O celular deve abrir a tela de confirmação e tocar o alarme imediatamente.</p>
+        </div>
+        <div class="schedules-grid" id="test-schedules-grid">
+          <!-- Cards de simulação carregados via JS -->
+        </div>
+      </section>
+
+      <!-- ABA 3: HORÁRIOS -->
+      <section class="tab-panel" id="panel-schedules">
+        <div class="panel-header">
+          <h2>📅 Ajustar Horários dos Alarmes</h2>
+          <p>Defina o horário exato em que os alarmes diários disparam no celular. O aplicativo mobile atualizará os agendamentos internos do Android automaticamente.</p>
+        </div>
+        <div class="schedules-list-container" id="schedules-edit-list">
+          <!-- Listagem de horários e botões de editar -->
+        </div>
+      </section>
+
+      <!-- ABA 4: MEDICAMENTOS -->
+      <section class="tab-panel" id="panel-medicines">
+        <div class="panel-header-row">
+          <div>
+            <h2>💊 Gerenciar Medicamentos</h2>
+            <p>Cadastre novos remédios, marque tratamentos temporários e vincule cada medicamento a um ou mais horários de disparo.</p>
+          </div>
+          <button class="btn btn-primary" id="btn-add-medicine">➕ Novo Medicamento</button>
+        </div>
+        
+        <div class="medicines-grid" id="medicines-list-grid">
+          <!-- Cards de medicamentos carregados via JS -->
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- MODAL DE MEDICAMENTO -->
+  <div class="modal" id="medicine-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title">Novo Medicamento</h2>
+        <button class="btn-close" id="btn-close-modal">✕</button>
+      </div>
+      <form id="medicine-form">
+        <input type="hidden" id="form-med-id">
+        
+        <div class="form-group">
+          <label for="form-med-nome">Nome do Remédio *</label>
+          <input type="text" id="form-med-nome" required placeholder="Ex: Selozok, Enalapril">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-med-dosagem">Dosagem *</label>
+            <input type="text" id="form-med-dosagem" required placeholder="Ex: 50mg, 1 comprimido">
+          </div>
+          <div class="form-group">
+            <label for="form-med-funcao">Função / Indicação *</label>
+            <input type="text" id="form-med-funcao" required placeholder="Ex: Pressão, Coração">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Cor de Identificação (Dona Fátima)</label>
+          <div class="color-presets-picker" id="color-presets-container">
+            <!-- Gerado via JS -->
+          </div>
+          <input type="hidden" id="form-med-cor" value="#3498DB">
+        </div>
+
+        <div class="form-group inline-switch-group">
+          <div class="switch-labels">
+            <label class="no-margin">Tratamento Temporário?</label>
+            <p class="sub-label">Desativa o remédio após os dias de uso acabarem</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="form-med-temporario">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="form-group hidden" id="temp-days-container">
+          <label for="form-med-dias">Dias Restantes de Uso</label>
+          <input type="number" id="form-med-dias" min="1" max="365" value="10">
+        </div>
+
+        <div class="form-group">
+          <label for="form-med-observacao">Observações (Opcional)</label>
+          <textarea id="form-med-observacao" rows="2" placeholder="Ex: Tomar de estômago cheio, engolir inteiro"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Vincular a quais Horários?</label>
+          <div class="schedules-checklist" id="schedules-checklist-container">
+            <!-- Gerado via JS -->
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="btn-submit-form">Salvar Medicamento</button>
+          <button type="button" class="btn btn-danger hidden" id="btn-delete-med">Excluir Remédio</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- NOTIFICAÇÃO TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
