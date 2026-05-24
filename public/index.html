@@ -112,9 +112,12 @@
 
       <!-- ABA 3: HORÁRIOS -->
       <section class="tab-panel" id="panel-schedules">
-        <div class="panel-header">
-          <h2>📅 Ajustar Horários dos Alarmes</h2>
-          <p>Defina o horário exato em que os alarmes diários disparam no celular. O aplicativo mobile atualizará os agendamentos internos do Android automaticamente.</p>
+        <div class="panel-header-row">
+          <div>
+            <h2>📅 Ajustar Horários dos Alarmes</h2>
+            <p>Defina o horário exato em que os alarmes diários disparam no celular. O aplicativo mobile atualizará os agendamentos internos do Android automaticamente.</p>
+          </div>
+          <button class="btn btn-primary" id="btn-add-schedule">➕ Novo Horário</button>
         </div>
         <div class="schedules-list-container" id="schedules-edit-list">
           <!-- Listagem de horários e botões de editar -->
@@ -204,6 +207,45 @@
         <div class="form-actions">
           <button type="submit" class="btn btn-primary" id="btn-submit-form">Salvar Medicamento</button>
           <button type="button" class="btn btn-danger hidden" id="btn-delete-med">Excluir Remédio</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL DE HORÁRIO -->
+  <div class="modal" id="schedule-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title-schedule">Novo Horário</h2>
+        <button class="btn-close" id="btn-close-modal-schedule">✕</button>
+      </div>
+      <form id="schedule-form">
+        <input type="hidden" id="form-schedule-id">
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-schedule-titulo">Título *</label>
+            <input type="text" id="form-schedule-titulo" required placeholder="Ex: Manhã">
+          </div>
+          <div class="form-group">
+            <label for="form-schedule-hora">Horário (HH:MM) *</label>
+            <input type="text" id="form-schedule-hora" required placeholder="Ex: 08:00" maxlength="5">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="form-schedule-voz">Mensagem de Voz *</label>
+          <input type="text" id="form-schedule-voz" required placeholder="Ex: Dona Fátima, hora dos remédios da manhã">
+        </div>
+
+        <div class="form-group">
+          <label for="form-schedule-emoji">Emoji Identificador *</label>
+          <input type="text" id="form-schedule-emoji" required placeholder="Ex: 🌅">
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="btn-submit-schedule-form">Salvar Horário</button>
+          <button type="button" class="btn btn-danger hidden" id="btn-delete-schedule">Excluir Alarme</button>
         </div>
       </form>
     </div>

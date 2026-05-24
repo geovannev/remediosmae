@@ -1,0 +1,241 @@
+{
+  "medicines": [
+    {
+      "id": 1,
+      "nome": "Selozok",
+      "dosagem": "25mg",
+      "funcao": "Controle dos batimentos cardíacos",
+      "cor": "#4A90D9",
+      "temporario": 0,
+      "dias_restantes": 0,
+      "observacao": null
+    },
+    {
+      "id": 2,
+      "nome": "Enalapril",
+      "dosagem": "5mg",
+      "funcao": "Controle da pressão arterial",
+      "cor": "#E87C2E",
+      "temporario": 0,
+      "dias_restantes": 0,
+      "observacao": null
+    },
+    {
+      "id": 3,
+      "nome": "Vascor MR",
+      "dosagem": "35mg",
+      "funcao": "Oxigenação do coração",
+      "cor": "#D94040",
+      "temporario": 0,
+      "dias_restantes": 0,
+      "observacao": null
+    },
+    {
+      "id": 4,
+      "nome": "Slow K",
+      "dosagem": "600mg",
+      "funcao": "Reposição de potássio",
+      "cor": "#F5A623",
+      "temporario": 1,
+      "dias_restantes": 4,
+      "observacao": "Tomar com bastante água"
+    },
+    {
+      "id": 5,
+      "nome": "Escitalopram",
+      "dosagem": "10mg",
+      "funcao": "Controle da ansiedade e crises de pânico",
+      "cor": "#7B68EE",
+      "temporario": 0,
+      "dias_restantes": 0,
+      "observacao": "Tomar separado dos outros medicamentos"
+    },
+    {
+      "id": 6,
+      "nome": "AAS",
+      "dosagem": "100mg",
+      "funcao": "Evitar coagulação e proteger artérias",
+      "cor": "#FF6B6B",
+      "temporario": 0,
+      "dias_restantes": 0,
+      "observacao": "Nunca tomar de estômago vazio"
+    },
+    {
+      "id": 7,
+      "nome": "Clopidogrel",
+      "dosagem": "75mg",
+      "funcao": "Proteger artérias",
+      "cor": "#4ECDC4",
+      "temporario": 0,
+      "dias_restantes": 0,
+      "observacao": "Nunca tomar de estômago vazio"
+    },
+    {
+      "id": 8,
+      "nome": "Atorvastatina",
+      "dosagem": "40mg",
+      "funcao": "Controle de gordura e proteção vascular",
+      "cor": "#45B7D1",
+      "temporario": 0,
+      "dias_restantes": 0,
+      "observacao": "Tomar antes de dormir"
+    }
+  ],
+  "schedules": [
+    {
+      "id": 1,
+      "titulo": "Manhã",
+      "emoji": "🌅",
+      "hora": "08:00",
+      "mensagem_voz": "Dona Fátima, está na hora dos remédios da manhã."
+    },
+    {
+      "id": 2,
+      "titulo": "Meio da Manhã",
+      "emoji": "☀️",
+      "hora": "10:00",
+      "mensagem_voz": "Dona Fátima, está na hora do remédio da ansiedade."
+    },
+    {
+      "id": 3,
+      "titulo": "Almoço",
+      "emoji": "🍽️",
+      "hora": "11:30",
+      "mensagem_voz": "Dona Fátima, está na hora dos remédios do almoço."
+    },
+    {
+      "id": 4,
+      "titulo": "Noite",
+      "emoji": "🌙",
+      "hora": "20:00",
+      "mensagem_voz": "Dona Fátima, está na hora dos remédios da janta."
+    },
+    {
+      "id": 5,
+      "titulo": "Ao Deitar",
+      "emoji": "😴",
+      "hora": "22:00",
+      "mensagem_voz": "Dona Fátima, está na hora do remédio do colesterol."
+    }
+  ],
+  "schedule_medicines": [
+    {
+      "schedule_id": 1,
+      "medicine_id": 1
+    },
+    {
+      "schedule_id": 1,
+      "medicine_id": 2
+    },
+    {
+      "schedule_id": 1,
+      "medicine_id": 3
+    },
+    {
+      "schedule_id": 1,
+      "medicine_id": 4
+    },
+    {
+      "schedule_id": 2,
+      "medicine_id": 5
+    },
+    {
+      "schedule_id": 3,
+      "medicine_id": 6
+    },
+    {
+      "schedule_id": 3,
+      "medicine_id": 7
+    },
+    {
+      "schedule_id": 4,
+      "medicine_id": 2
+    },
+    {
+      "schedule_id": 4,
+      "medicine_id": 3
+    },
+    {
+      "schedule_id": 4,
+      "medicine_id": 4
+    },
+    {
+      "schedule_id": 5,
+      "medicine_id": 8
+    }
+  ],
+  "confirmations": [
+    {
+      "id": 1,
+      "medication_id": 2,
+      "schedule_id": 4,
+      "status": "confirmed",
+      "confirmed_at": "2026-05-23T20:05:00.000-03:00",
+      "date": "2026-05-23"
+    },
+    {
+      "id": 2,
+      "medication_id": 3,
+      "schedule_id": 4,
+      "status": "confirmed",
+      "confirmed_at": "2026-05-23T20:05:10.000-03:00",
+      "date": "2026-05-23"
+    },
+    {
+      "id": 3,
+      "medication_id": 4,
+      "schedule_id": 4,
+      "status": "confirmed",
+      "confirmed_at": "2026-05-23T20:05:20.000-03:00",
+      "date": "2026-05-23"
+    },
+    {
+      "id": 4,
+      "medication_id": 8,
+      "schedule_id": 5,
+      "status": "confirmed",
+      "confirmed_at": "2026-05-23T22:02:00.000-03:00",
+      "date": "2026-05-23"
+    },
+    {
+      "id": 5,
+      "medication_id": 1,
+      "schedule_id": 1,
+      "status": "confirmed",
+      "confirmed_at": "2026-05-24T08:04:00.000-03:00",
+      "date": "2026-05-24"
+    },
+    {
+      "id": 6,
+      "medication_id": 2,
+      "schedule_id": 1,
+      "status": "confirmed",
+      "confirmed_at": "2026-05-24T08:04:10.000-03:00",
+      "date": "2026-05-24"
+    },
+    {
+      "id": 7,
+      "medication_id": 3,
+      "schedule_id": 1,
+      "status": "confirmed",
+      "confirmed_at": "2026-05-24T08:04:20.000-03:00",
+      "date": "2026-05-24"
+    },
+    {
+      "id": 8,
+      "medication_id": 4,
+      "schedule_id": 1,
+      "status": "confirmed",
+      "confirmed_at": "2026-05-24T08:04:30.000-03:00",
+      "date": "2026-05-24"
+    },
+    {
+      "id": 9,
+      "medication_id": 5,
+      "schedule_id": 2,
+      "status": "confirmed",
+      "confirmed_at": "2026-05-24T10:02:00.000-03:00",
+      "date": "2026-05-24"
+    }
+  ]
+}

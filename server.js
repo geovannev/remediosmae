@@ -25,10 +25,46 @@ app.use(express.static(path.join(__dirname, 'public')));
 function readDb() {
   try {
     const data = fs.readFileSync(DB_PATH, 'utf8');
-    return JSON.parse(data);
+    const parsed = JSON.parse(data);
+    if (parsed.medicines.length === 0 && parsed.schedules.length === 0) {
+      throw new Error("Empty database");
+    }
+    return parsed;
   } catch (err) {
-    console.error('[Server] Erro ao ler db.json, usando padrão vazio:', err);
-    return { medicines: [], schedules: [], schedule_medicines: [], confirmations: [] };
+    console.log('[Server] db.json não existe ou está vazio. Inicializando com dados originais da Dona Fátima...');
+    const defaultData = {
+      medicines: [
+        { id: 1, nome: "Selozok", dosagem: "25mg", funcao: "Controle dos batimentos cardíacos", cor: "#E74C3C", temporario: 0, dias_restantes: 0, observacao: "" },
+        { id: 2, nome: "Enalapril", dosagem: "5mg", funcao: "Controle da pressão arterial", cor: "#3498DB", temporario: 0, dias_restantes: 0, observacao: "" },
+        { id: 3, nome: "Vascor MR", dosagem: "35mg", funcao: "Oxigenação do coração", cor: "#9B59B6", temporario: 0, dias_restantes: 0, observacao: "" },
+        { id: 4, nome: "Slow K", dosagem: "600mg", funcao: "Reposição de potássio", cor: "#E67E22", temporario: 1, dias_restantes: 4, observacao: "Tomar com bastante água" },
+        { id: 5, nome: "Escitalopram", dosagem: "10mg", funcao: "Controle da ansiedade e crises de pânico", cor: "#2ECC71", temporario: 0, dias_restantes: 0, observacao: "Tomar separado dos outros medicamentos" },
+        { id: 6, nome: "AAS", dosagem: "100mg", funcao: "Evitar coagulação, proteger artérias", cor: "#F1C40F", temporario: 0, dias_restantes: 0, observacao: "Nunca tomar de estômago vazio" },
+        { id: 7, nome: "Clopidogrel", dosagem: "75mg", funcao: "Proteger artérias", cor: "#F1C40F", temporario: 0, dias_restantes: 0, observacao: "Nunca tomar de estômago vazio" },
+        { id: 8, nome: "Atorvastatina", dosagem: "40mg", funcao: "Controle de gordura e proteção vascular", cor: "#3498DB", temporario: 0, dias_restantes: 0, observacao: "Tomar antes de dormir" }
+      ],
+      schedules: [
+        { id: 1, hora: "08:00", titulo: "Manhã", mensagem_voz: "Dona Fátima, está na hora dos remédios da manhã.", emoji: "🌅" },
+        { id: 2, hora: "10:00", titulo: "Meio da Manhã", mensagem_voz: "Dona Fátima, está na hora do remédio da ansiedade.", emoji: "☀️" },
+        { id: 3, hora: "13:00", titulo: "Almoço", mensagem_voz: "Dona Fátima, está na hora dos remédios do almoço.", emoji: "🍽️" },
+        { id: 4, hora: "20:00", titulo: "Noite", mensagem_voz: "Dona Fátima, está na hora dos remédios da janta.", emoji: "🌙" },
+        { id: 5, hora: "22:00", titulo: "Ao Deitar", mensagem_voz: "Dona Fátima, está na hora do remédio do colesterol.", emoji: "😴" }
+      ],
+      schedule_medicines: [
+        { schedule_id: 1, medicine_id: 1 }, { schedule_id: 1, medicine_id: 2 }, { schedule_id: 1, medicine_id: 3 }, { schedule_id: 1, medicine_id: 4 },
+        { schedule_id: 2, medicine_id: 5 },
+        { schedule_id: 3, medicine_id: 6 }, { schedule_id: 3, medicine_id: 7 },
+        { schedule_id: 4, medicine_id: 2 }, { schedule_id: 4, medicine_id: 3 }, { schedule_id: 4, medicine_id: 4 },
+        { schedule_id: 5, medicine_id: 8 }
+      ],
+      confirmations: []
+    };
+    try {
+      fs.writeFileSync(DB_PATH, JSON.stringify(defaultData, null, 2), 'utf8');
+    } catch (e) {
+      console.error('[Server] Falha ao escrever db.json inicial:', e);
+    }
+    return defaultData;
   }
 }
 

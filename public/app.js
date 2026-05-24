@@ -63,6 +63,18 @@ const elements = {
   schedulesChecklistContainer: document.getElementById('schedules-checklist-container'),
   btnDeleteMed: document.getElementById('btn-delete-med'),
   
+  // Schedule Modal
+  scheduleModal: document.getElementById('schedule-modal'),
+  scheduleModalTitle: document.getElementById('modal-title-schedule'),
+  btnCloseScheduleModal: document.getElementById('btn-close-modal-schedule'),
+  scheduleForm: document.getElementById('schedule-form'),
+  formScheduleId: document.getElementById('form-schedule-id'),
+  formScheduleTitulo: document.getElementById('form-schedule-titulo'),
+  formScheduleHora: document.getElementById('form-schedule-hora'),
+  formScheduleVoz: document.getElementById('form-schedule-voz'),
+  formScheduleEmoji: document.getElementById('form-schedule-emoji'),
+  btnDeleteSchedule: document.getElementById('btn-delete-schedule'),
+  
   // Toast
   toast: document.getElementById('toast')
 };
@@ -355,48 +367,17 @@ function renderSchedulesTab() {
         </div>
       </div>
       <div class="schedule-row-right">
-        <div class="time-edit-container" id="time-container-${h.id}">
+        <div class="time-edit-container">
           <span class="schedule-time-text">${h.hora}</span>
-          <button class="btn btn-edit-web btn-edit-time" data-id="${h.id}" data-time="${h.hora}">Ajustar Hora ✏️</button>
+          <button class="btn btn-edit-web btn-edit-time">Editar ✏️</button>
         </div>
       </div>
     `;
 
-    // Edição inline de horário
+    // Edição via Modal
     const btnEdit = row.querySelector('.btn-edit-time');
     btnEdit.addEventListener('click', () => {
-      const container = document.getElementById(`time-container-${h.id}`);
-      const curTime = btnEdit.dataset.time;
-      
-      container.innerHTML = `
-        <input type="text" class="time-input-web" value="${curTime}" maxlength="5" id="input-time-${h.id}">
-        <button class="btn btn-primary btn-save-time" data-id="${h.id}">Salvar</button>
-        <button class="btn btn-danger btn-cancel-time" data-id="${h.id}" data-time="${curTime}">X</button>
-      `;
-
-      // Cancelar edição
-      container.querySelector('.btn-cancel-time').addEventListener('click', () => {
-        renderSchedulesTab();
-      });
-
-      // Salvar horário
-      container.querySelector('.btn-save-time').addEventListener('click', () => {
-        const inputVal = document.getElementById(`input-time-${h.id}`).value.trim();
-        const timeRegex = /^[0-2][0-9]:[0-5][0-9]$/;
-        
-        if (!timeRegex.test(inputVal)) {
-          alert('Formato inválido! Use o formato 24h HH:MM (ex: 08:30).');
-          return;
-        }
-
-        // Atualiza localmente
-        const idx = state.schedules.findIndex(s => s.id === h.id);
-        if (idx !== -1) {
-          state.schedules[idx].hora = inputVal;
-          // Envia para o servidor e reagenda tudo
-          saveSyncState();
-        }
-      });
+      abrirModalHorario(h);
     });
 
     elements.schedulesEditList.appendChild(row);
@@ -544,6 +525,60 @@ function setupModal() {
   document.getElementById('btn-add-medicine').addEventListener('click', () => {
     abrirModalMedicamento(null);
   });
+
+  // --- Schedule Modal Events ---
+  elements.btnCloseScheduleModal.addEventListener('click', () => {
+    elements.scheduleModal.classList.remove('active');
+  });
+
+  document.getElementById('btn-add-schedule').addEventListener('click', () => {
+    abrirModalHorario(null);
+  });
+
+  elements.btnDeleteSchedule.addEventListener('click', () => {
+    const id = parseInt(elements.formScheduleId.value, 10);
+    const titulo = elements.formScheduleTitulo.value;
+    
+    if (confirm(`Tem certeza que deseja excluir o horário "${titulo}" e desvincular todos os remédios dele?`)) {
+      state.schedules = state.schedules.filter(s => s.id !== id);
+      state.schedule_medicines = state.schedule_medicines.filter(sm => sm.schedule_id !== id);
+      
+      elements.scheduleModal.classList.remove('active');
+      saveSyncState();
+    }
+  });
+
+  elements.scheduleForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const idVal = elements.formScheduleId.value;
+    const titulo = elements.formScheduleTitulo.value.trim();
+    const hora = elements.formScheduleHora.value.trim();
+    const mensagem_voz = elements.formScheduleVoz.value.trim();
+    const emoji = elements.formScheduleEmoji.value.trim();
+
+    const timeRegex = /^[0-2][0-9]:[0-5][0-9]$/;
+    if (!timeRegex.test(hora)) {
+      alert('Formato inválido! Use o formato 24h HH:MM (ex: 08:30).');
+      return;
+    }
+
+    if (idVal) {
+      // Edição
+      const id = parseInt(idVal, 10);
+      const idx = state.schedules.findIndex(s => s.id === id);
+      if (idx !== -1) {
+        state.schedules[idx] = { id, titulo, hora, mensagem_voz, emoji };
+      }
+    } else {
+      // Novo
+      const nextId = state.schedules.reduce((max, s) => Math.max(max, s.id), 0) + 1;
+      state.schedules.push({ id: nextId, titulo, hora, mensagem_voz, emoji });
+    }
+
+    elements.scheduleModal.classList.remove('active');
+    saveSyncState();
+  });
 }
 
 function setupFormColorPresets() {
@@ -630,4 +665,25 @@ function abrirModalMedicamento(med = null) {
   }
 
   elements.medModal.classList.add('active');
+}
+
+function abrirModalHorario(schedule = null) {
+  if (schedule) {
+    elements.scheduleModalTitle.textContent = '✏️ Editar Horário';
+    elements.formScheduleId.value = schedule.id;
+    elements.formScheduleTitulo.value = schedule.titulo;
+    elements.formScheduleHora.value = schedule.hora;
+    elements.formScheduleVoz.value = schedule.mensagem_voz;
+    elements.formScheduleEmoji.value = schedule.emoji;
+    elements.btnDeleteSchedule.classList.remove('hidden');
+  } else {
+    elements.scheduleModalTitle.textContent = '➕ Adicionar Novo Horário';
+    elements.formScheduleId.value = '';
+    elements.formScheduleTitulo.value = '';
+    elements.formScheduleHora.value = '';
+    elements.formScheduleVoz.value = '';
+    elements.formScheduleEmoji.value = '⏰';
+    elements.btnDeleteSchedule.classList.add('hidden');
+  }
+  elements.scheduleModal.classList.add('active');
 }
